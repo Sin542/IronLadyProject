@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iron Lady FAQ Chatbot</title>
+<style>
+*{box-sizing:border-box}
+
+/* Body & Page layout */
+body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    background:#0f172a;
+    color:#e2e8f0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+}
+
+/* Chat app container */
+.app{
+    width:100%;
+    max-width:720px;
+    background:#111827;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+/* Header */
+header{
+    font-size:20px;
+    font-weight:700;
+    text-align:center;
+    padding:8px 0;
+    border-bottom:1px solid #1f2937;
+}
+
+/* Chat area */
+.chat{
+    flex:1;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:8px;
+}
+.msg{
+    max-width:80%;
+    padding:10px 12px;
+    border-radius:14px;
+    line-height:1.4;
+}
+.msg.user{
+    align-self:flex-end;
+    background:#2563eb;
+    color:#fff;
+}
+.msg.bot{
+    align-self:flex-start;
+    background:#1f2937;
+    color:#e5e7eb;
+}
+
+/* Composer (input + send) */
+.composer{
+    display:flex;
+    gap:8px;
+}
+.composer input{
+    flex:1;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #1f2937;
+    background:#0b1220;
+    color:#e2e8f0;
+}
+.composer button{
+    padding:12px 16px;
+    border:none;
+    border-radius:12px;
+    background:#22c55e;
+    color:#04111a;
+    font-weight:700;
+    cursor:pointer;
+}
+.composer button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* Back to Home button (same as Send button) */
+#home-btn{
+    padding:12px 16px;
+    border:none;
+    border-radius:12px;
+    background:#22c55e;
+    color:#04111a;
+    font-weight:700;
+    cursor:pointer;
+}
+#home-btn:hover{
+    background:#16a34a;
+}
+</style>
+</head>
+<body>
+<div class="app">
+    <header>Iron Lady FAQ Chatbot</header>
+    <div class="chat" id="chat"></div>
+    <div class="composer">
+        <input type="text" id="msg" placeholder="Ask about programs, duration, mode, certificates, mentors" autocomplete="off">
+        <button id="send">Send</button>
+    </div>
+    <button id="home-btn" onclick="window.location.href='/'">Back to Home</button>
+</div>
+
+<script>
+/* ----- JavaScript for chatbot with auto-scroll ----- */
+const chat = document.getElementById('chat')
+const msg = document.getElementById('msg')
+const send = document.getElementById('send')
+
+function addBubble(text, role){
+    const div = document.createElement('div')
+    div.className = `msg ${role}`
+    div.textContent = text
+    chat.appendChild(div)
+    // Force auto-scroll to bottom
+    chat.scrollTop = chat.scrollHeight
+}
+
+async function ask(){
+    const text = msg.value.trim()
+    if(!text) return
+    addBubble(text, 'user')
+    msg.value = ''
+    send.disabled = true
+    try{
+        const r = await fetch('/api/chat', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({message:text})
+        })
+        const data = await r.json()
+        addBubble(data.reply || 'Sorry, something went wrong.', 'bot')
+    }catch(e){
+        addBubble('Network error. Try again.', 'bot')
+    }finally{
+        send.disabled = false
+        msg.focus()
+    }
+}
+
+/* Event listeners */
+send.addEventListener('click', ask)
+msg.addEventListener('keydown', e => { if(e.key==='Enter') ask() })
+
+window.addEventListener('load', () => {
+    addBubble('Hi! Ask me about programs, duration, mode, certificates, or mentors.', 'bot')
+    msg.focus()
+})
+</script>
+</body>
+</html>

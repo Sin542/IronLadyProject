@@ -1,0 +1,32 @@
+[
+{
+"id": "programs",
+"title": "What programs does Iron Lady offer?",
+"answer": "Iron Lady offers women-focused leadership programs designed for career acceleration, confidence and communication, including Leadership Foundations, Manager to Leader, Career Restart, Speak to Lead, and corporate workshops. For the latest details, refer to the official website.",
+"keywords": ["programs", "offer", "course", "courses", "track", "tracks"]
+},
+{
+"id": "duration",
+"title": "What is the program duration?",
+"answer": "Cohort-based programs typically run 6–12 weeks with weekly live sessions and assignments. Corporate workshops may be 1–3 days. Exact duration varies by cohort and track.",
+"keywords": ["duration", "long", "weeks", "months", "time"]
+},
+{
+"id": "mode",
+"title": "Is the program online or offline?",
+"answer": "Programs are primarily delivered online with live, instructor-led sessions. Select cohorts may offer hybrid or in-person events in Bengaluru depending on scheduling.",
+"keywords": ["online", "offline", "hybrid", "mode", "in person"]
+},
+{
+"id": "certificate",
+"title": "Are certificates provided?",
+"answer": "Yes. A course completion certificate is provided upon successfully meeting program requirements.",
+"keywords": ["certificate", "certificates", "certification", "provided"]
+},
+{
+"id": "mentors",
+"title": "Who are the mentors/coaches?",
+"answer": "Mentors and coaches include experienced industry leaders, certified coaches, and entrepreneurs aligned with Iron Lady’s mission to empower women in leadership.",
+"keywords": ["mentor", "mentors", "coach", "coaches", "trainer", "trainers", "faculty"]
+}
+]

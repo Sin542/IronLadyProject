@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List</title>
+<style>
+*{box-sizing:border-box}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0f172a;
+    color: #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    margin: 0;
+}
+.todo-container {
+    background-color: #111827;
+    color: #e2e8f0;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+    width: 400px;
+}
+h1 { text-align: center; margin-bottom: 20px; }
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 1px solid #1f2937;
+    background-color: #0b1220;
+    color: #e2e8f0;
+    font-size: 16px;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background-color: #22c55e;
+    color: #04111a;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+button:hover { background-color: #16a34a; }
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #1f2937;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+li button {
+    width: auto;
+    background-color: #e74c3c;
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 8px;
+}
+li button:hover { background-color: #c0392b; }
+.back-button { margin-top: 20px; text-align: center; }
+.back-button button {
+    width: auto;
+    background-color: #22c55e;
+}
+.back-button button:hover { background-color: #16a34a; }
+</style>
+</head>
+<body>
+<div class="todo-container">
+    <h1>To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Add new task...">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul>
+    <div class="back-button">
+        <button onclick="window.location.href='/'">Back to Home</button>
+    </div>
+</div>
+
+<script>
+const taskListEl = document.getElementById('taskList');
+const taskInput = document.getElementById('taskInput');
+
+function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll('#taskList li span.task-text').forEach(span => {
+        tasks.push(span.textContent);
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    tasks.forEach(task => createTaskElement(task));
+}
+
+function createTaskElement(task) {
+    const li = document.createElement('li');
+
+    const span = document.createElement('span');
+    span.className = "task-text";
+    span.textContent = task;
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = "Delete";
+    delBtn.onclick = () => {
+        li.remove();
+        saveTasks();
+    };
+
+    li.appendChild(span);
+    li.appendChild(delBtn);
+    taskListEl.appendChild(li);
+}
+
+function addTask() {
+    const task = taskInput.value.trim();
+    if(task === "") return;
+    createTaskElement(task);
+    saveTasks();
+    taskInput.value = "";
+}
+
+// Load tasks on page load
+window.addEventListener('load', loadTasks);
+</script>
+</body>
+</html>
